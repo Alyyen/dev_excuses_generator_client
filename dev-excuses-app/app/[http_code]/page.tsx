@@ -6,11 +6,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import fetchRandomExcuse from "../utils/fetchRandomExcuse";
-import { Excuse } from "../utils/excuse.type";
+import { ExcuseType } from "../utils/excuse.type";
 import fetchCurrentExcuse from "../utils/fetchCurrentExcuse";
 
 export default function Excuse() {
-  const [currentExcuse, setCurrentExcuse] = useState<Excuse | number | null>();
+  const [currentExcuse, setCurrentExcuse] = useState<
+    ExcuseType | number | null
+  >();
   const [newExcuse, setNewExcuse] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
