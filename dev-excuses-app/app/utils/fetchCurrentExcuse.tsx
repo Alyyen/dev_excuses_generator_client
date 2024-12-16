@@ -16,6 +16,7 @@ export default async function fetchCurrentExcuse(
     const excuse = await response.json();
     return excuse;
   } catch (error) {
+    console.log({ error });
     return 404;
   }
 }

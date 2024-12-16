@@ -23,6 +23,7 @@ export default async function createNewExcuse(
     await response.json();
     return httpCode;
   } catch (error) {
+    console.log({ error });
     return "Error while creating new excuse";
   }
 }

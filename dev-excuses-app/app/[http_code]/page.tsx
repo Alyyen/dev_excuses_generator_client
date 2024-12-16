@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import fetchRandomExcuse from "../utils/fetchRandomExcuse";
 import { ExcuseType } from "../utils/excuse.type";
 import fetchCurrentExcuse from "../utils/fetchCurrentExcuse";
+import Image from "next/image";
 
 export default function Excuse() {
   const [currentExcuse, setCurrentExcuse] = useState<
@@ -56,7 +57,7 @@ export default function Excuse() {
     if (newExcuse) {
       router.push(`/${newExcuse}`);
     }
-  }, [newExcuse]);
+  }, [newExcuse, router]);
 
   return (
     <div className="flex-1 flex flex-col">
@@ -83,7 +84,7 @@ export default function Excuse() {
                   </>
                 ) : (
                   <>
-                    <img
+                    <Image
                       src="/undraw_page_not_found_404.svg"
                       alt="No excuse found"
                       className="w-1/2 h-1/2 mb-8"

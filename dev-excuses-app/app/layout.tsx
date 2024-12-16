@@ -4,6 +4,7 @@ import NewExcuseButton from "./components/atoms/NewExcuseButton";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,9 +35,9 @@ export default function RootLayout({
         <div className="flex h-screen bg-gray-900 text-gray-100">
           <div className="flex-1 flex flex-col">
             <header className="bg-gray-800 p-4 border-b border-gray-700 flex items-center justify-between">
-              <a href="/">
+              <Link href="/">
                 <h1 className="text-xl font-semibold">Dev excuses</h1>
-              </a>
+              </Link>
               <NewExcuseButton />
             </header>
             {children}

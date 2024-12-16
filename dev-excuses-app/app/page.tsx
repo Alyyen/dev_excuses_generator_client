@@ -25,7 +25,7 @@ export default function Home() {
     if (excuse) {
       router.push(`/${excuse}`);
     }
-  }, [excuse]);
+  }, [excuse, router]);
 
   return (
     <div className="flex-1 flex flex-col">

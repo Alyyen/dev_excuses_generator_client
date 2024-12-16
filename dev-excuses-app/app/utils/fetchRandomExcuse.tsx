@@ -3,7 +3,7 @@ export default async function fetchRandomExcuse(): Promise<number> {
 
   // get the "http_codes" already showed
   const stored = localStorage.getItem("http_codes");
-  let http_codes_stored = stored ? JSON.parse(stored) : [];
+  const http_codes_stored = stored ? JSON.parse(stored) : [];
 
   const apiRoute = `${api}/excuses/any?http_codes=${http_codes_stored}`;
 
@@ -25,6 +25,7 @@ export default async function fetchRandomExcuse(): Promise<number> {
     // Return the http_code
     return newExcuseHttpCode;
   } catch (error) {
+    console.log({ error });
     return 404;
   }
 }
