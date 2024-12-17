@@ -11,7 +11,6 @@ const NewExcuseButton: React.FC = () => {
   const [selectedTag, setSelectedTag] = useState<Tag>(Tag.OTHER);
   const [httpCode, setHttpCode] = useState<string>("");
   const [excuseMessage, setExcuseMessage] = useState<string>("");
-  const [error, setError] = useState<boolean>(false);
   const [errorOnHttpCode, setErrorOnHttpCode] = useState<string>("");
   const [errorOnMessage, setErrorOnMessage] = useState<string>("");
 
@@ -19,39 +18,48 @@ const NewExcuseButton: React.FC = () => {
   const handleCloseModal = () => setModalOpen(false);
 
   const handleCreateExcuse = async () => {
-    // Ensure HTTP code is valid
+    let hasError = false;
+
+    // HTTP code validation
     if (!httpCode || !/^\d+$/.test(httpCode)) {
+      hasError = true;
       setErrorOnHttpCode("Please enter a valid HTTP code");
-      setError(true);
+    } else {
+      setErrorOnHttpCode("");
     }
 
+    // Check if message is empty
     if (!excuseMessage) {
+      hasError = true;
       setErrorOnMessage("Message cannot be empty");
-      setError(true);
+    } else {
+      setErrorOnMessage("");
     }
 
-    // Convert httpCode to number for API call
+    // Create
     const newExcuseAdded = await createNewExcuse(
       parseInt(httpCode, 10),
       excuseMessage,
       selectedTag
     );
 
-    // Print specific error message
+    // Validation
     if (
       newExcuseAdded === "An excuse with this message already exists." ||
       newExcuseAdded === "Message cannot be empty."
     ) {
-      setError(true);
+      // errors on message
+      hasError = true;
       setErrorOnMessage(newExcuseAdded);
     } else if (typeof newExcuseAdded === "string") {
+      // errors on http code
+      hasError = true;
       setErrorOnHttpCode(newExcuseAdded);
     }
 
-    if (!error) {
+    // If no error, close the modal and redirect to the new excuse
+    if (!hasError) {
       handleCloseModal();
-
-      // Reset the form
       setHttpCode("");
       setExcuseMessage("");
       router.push(`/${newExcuseAdded}`);
