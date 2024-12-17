@@ -1,4 +1,4 @@
-import { Tag } from "./tag.enum";
+import { Tag } from "../enums/tag.enum";
 
 export type ExcuseType = {
   http_code: number;

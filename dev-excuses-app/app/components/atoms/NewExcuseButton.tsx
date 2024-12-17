@@ -1,6 +1,6 @@
 "use client";
 import createNewExcuse from "@/app/utils/createNewExcuse";
-import { Tag } from "@/app/utils/tag.enum";
+import { Tag } from "@/app/utils/enums/tag.enum";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Modal from "../organisms/Modal";
@@ -9,8 +9,8 @@ const NewExcuseButton: React.FC = () => {
   const router = useRouter();
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedTag, setSelectedTag] = useState<Tag>(Tag.OTHER);
-  const [httpCode, setHttpCode] = useState<number | string>();
-  const [excuseMessage, setExcuseMessage] = useState<string>();
+  const [httpCode, setHttpCode] = useState<number | string>("");
+  const [excuseMessage, setExcuseMessage] = useState<string>("");
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
@@ -27,6 +27,11 @@ const NewExcuseButton: React.FC = () => {
     );
 
     handleCloseModal();
+
+    // reset the form
+    setExcuseMessage("");
+    setHttpCode("");
+
     router.push(`/${newExcuseAdded}`);
   };
 

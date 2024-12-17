@@ -1,8 +1,8 @@
-import { ExcuseType } from "./excuse.type";
+import { ExcuseType } from "./types/excuse.type";
 
 export default async function fetchCurrentExcuse(
   currentHttpCode: string
-): Promise<ExcuseType | number | null> {
+): Promise<ExcuseType | string> {
   const api = process.env.NEXT_PUBLIC_API;
 
   try {
@@ -15,8 +15,7 @@ export default async function fetchCurrentExcuse(
 
     const excuse = await response.json();
     return excuse;
-  } catch (error) {
-    console.log({ error });
-    return 404;
+  } catch (error: any) {
+    return error.message;
   }
 }

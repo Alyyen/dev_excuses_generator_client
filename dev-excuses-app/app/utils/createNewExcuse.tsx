@@ -1,4 +1,4 @@
-import { Tag } from "./tag.enum";
+import { Tag } from "./enums/tag.enum";
 
 export default async function createNewExcuse(
   httpCode: number | string,
@@ -22,8 +22,7 @@ export default async function createNewExcuse(
 
     await response.json();
     return httpCode;
-  } catch (error) {
-    console.log({ error });
-    return "Error while creating new excuse";
+  } catch (error: any) {
+    return error.message;
   }
 }

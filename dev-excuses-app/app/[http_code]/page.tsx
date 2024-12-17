@@ -6,15 +6,17 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import fetchRandomExcuse from "../utils/fetchRandomExcuse";
-import { ExcuseType } from "../utils/excuse.type";
+import { ExcuseType } from "../utils/types/excuse.type";
 import fetchCurrentExcuse from "../utils/fetchCurrentExcuse";
-import Image from "next/image";
+import ErrorPage from "../404";
 
 export default function Excuse() {
   const [currentExcuse, setCurrentExcuse] = useState<
-    ExcuseType | number | null
+    ExcuseType | string | null
   >();
-  const [newExcuse, setNewExcuse] = useState<number | null>(null);
+  const [newExcuse, setNewExcuse] = useState<number | string | null>(null);
+  const [error, setError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const pathname = usePathname();
@@ -24,32 +26,29 @@ export default function Excuse() {
   useEffect(() => {
     const getExcuse = async () => {
       if (currentHttpCode === null) return;
-
-      setLoading(true);
       const excuseFound = await fetchCurrentExcuse(currentHttpCode);
+
+      // If the excuse is not found, set the current excuse to 404 and display error message
+      if (typeof excuseFound === "string") {
+        setError(true);
+        setErrorMessage(excuseFound);
+      }
+
+      // Set the current excuse
       setCurrentExcuse(excuseFound);
 
       // Add delay to simulate loading
       setTimeout(() => {
         setLoading(false);
-      }, 2000);
+      }, 1500);
     };
 
     getExcuse();
   }, [currentHttpCode]);
 
   const handleClick = async () => {
-    setLoading(true);
-
     const nextHttpCode = await fetchRandomExcuse();
     setNewExcuse(nextHttpCode);
-
-    setLoading(false);
-  };
-
-  const handleClearStorageAndGenerate = () => {
-    localStorage.clear();
-    handleClick();
   };
 
   // Redirect to the new page when a new data is generated
@@ -66,39 +65,24 @@ export default function Excuse() {
           <div className="flex flex-col items-center justify-center">
             {loading ? (
               <Loading />
-            ) : (
+            ) : error ? (
+              <ErrorPage message={errorMessage} />
+            ) : currentExcuse && typeof currentExcuse != "string" ? (
               <>
-                {currentExcuse && typeof currentExcuse != "number" ? (
-                  <>
-                    <h2 className="text-center text-lg font-semibold mb-4">
-                      {currentExcuse.message}
-                    </h2>
-                    <span className="text-xs text-slate-400 italic mb-4 font-semibold">
-                      #{currentExcuse.tag}
-                    </span>
-                    <Button
-                      text="Generate an excuse"
-                      className="h-12 bg-blue-500 hover:bg-blue-700 text-white px-6 rounded"
-                      onClick={handleClick}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Image
-                      src="/undraw_page_not_found_404.svg"
-                      alt="No excuse found"
-                      className="w-1/2 h-1/2 mb-8"
-                    />
-                    <Button
-                      text="Clear the local storage and generate an excuse"
-                      className="h-12 bg-blue-500 hover:bg-blue-700 text-white px-6 rounded"
-                      onClick={handleClearStorageAndGenerate}
-                      // TODO: if no excuse exists redirect to 404 page instead of showing this
-                      // TODO: fix the refresh of the page when the button is clicked
-                    />
-                  </>
-                )}
+                <h2 className="text-center text-lg font-semibold mb-4">
+                  {currentExcuse.message}
+                </h2>
+                <span className="text-xs text-slate-400 italic mb-4 font-semibold">
+                  #{currentExcuse.tag}
+                </span>
+                <Button
+                  text="Generate an excuse"
+                  className="h-12 bg-blue-500 hover:bg-blue-700 text-white px-6 rounded"
+                  onClick={handleClick}
+                />
               </>
+            ) : (
+              <></>
             )}
           </div>
         </div>

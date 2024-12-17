@@ -24,8 +24,7 @@ export default async function fetchRandomExcuse(): Promise<number> {
 
     // Return the http_code
     return newExcuseHttpCode;
-  } catch (error) {
-    console.log({ error });
-    return 404;
+  } catch (error: any) {
+    return error.message;
   }
 }
