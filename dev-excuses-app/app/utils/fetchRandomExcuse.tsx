@@ -24,6 +24,7 @@ export default async function fetchRandomExcuse(): Promise<number> {
 
     // Return the http_code
     return newExcuseHttpCode;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return error.message;
   }
